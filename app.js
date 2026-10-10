@@ -413,6 +413,44 @@
   const top = $('#top');
   addEventListener('scroll', () => top.classList.toggle('scrolled', scrollY > 10), { passive: true });
 
+  /* ---------- referans çerçevesi: logolar 5 fotoğrafın çevresinde tek sıra hâlinde, kayış gibi döner ---------- */
+  (() => {
+    const cer = $('#cer'), liste = $('#cerL');
+    if (!cer || !liste || !CSS.supports('offset-path', "path('M0 0H1')")) return;
+    const lg = $$('li', liste), N = lg.length, HIZ = 34;   // px/sn
+    let P = 0, aralik = 0, kayis = 0, ofs = 0, son = 0, gorunur = false, dur = false;
+    function olc() {
+      const W = cer.clientWidth, H = cer.clientHeight, p = parseFloat(getComputedStyle(cer).paddingTop) / 2, r = 22;
+      const x0 = p, y0 = p, x1 = W - p, y1 = H - p;
+      const yol = `path('M ${x0 + r} ${y0} H ${x1 - r} A ${r} ${r} 0 0 1 ${x1} ${y0 + r} V ${y1 - r} A ${r} ${r} 0 0 1 ${x1 - r} ${y1} H ${x0 + r} A ${r} ${r} 0 0 1 ${x0} ${y1 - r} V ${y0 + r} A ${r} ${r} 0 0 1 ${x0 + r} ${y0} Z')`;
+      P = 2 * (x1 - x0 - 2 * r) + 2 * (y1 - y0 - 2 * r) + 2 * Math.PI * r;
+      aralik = Math.max(W < 700 ? 82 : 116, P / N);          // logolar arası; hepsi sığıyorsa çevreye eşit dağılır
+      kayis = aralik * N;                                     // kayış çevreden uzunsa sığmayan logolar sırada bekler
+      lg.forEach(el => { el.style.offsetPath = yol; });
+    }
+    function ciz() {
+      const ek = kayis - P > 1;                               // sıra bekleyen logo var: giriş/çıkış noktasında yumuşak geçiş
+      lg.forEach((el, n) => {
+        const s = ((n * aralik + ofs) % kayis + kayis) % kayis;
+        if (s > P) { if (el.style.opacity !== '0') el.style.opacity = '0'; return; }
+        el.style.offsetDistance = s.toFixed(1) + 'px';
+        el.style.opacity = ek ? Math.min(1, s / 46, (P - s) / 46).toFixed(2) : '1';
+      });
+    }
+    function kare(t) {
+      if (!gorunur || document.hidden) { son = 0; return; }
+      if (son && !dur) ofs += Math.min(64, t - son) / 1000 * HIZ;
+      son = t; ciz(); requestAnimationFrame(kare);
+    }
+    cer.classList.add('on'); olc(); ciz();
+    if (reduce) return;
+    addEventListener('resize', () => { olc(); ciz(); });
+    $$('.venues img', cer).forEach(g => g.addEventListener('load', () => { olc(); ciz(); }, { once: true }));
+    cer.addEventListener('mouseenter', () => { dur = true; }); cer.addEventListener('mouseleave', () => { dur = false; });
+    new IntersectionObserver(e => { const g = e[0].isIntersecting; if (g && !gorunur) { gorunur = true; son = 0; requestAnimationFrame(kare); } gorunur = g; }, { rootMargin: '100px' }).observe(cer);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && gorunur) { son = 0; requestAnimationFrame(kare); } });
+  })();
+
   /* ---------- tasarla bandı: sandalyeler sahneden geçer, ortada minderleri üstlerine konar (tools/bant.py → SF_BANT) ---------- */
   (() => {
     const band = $('#tzBand'), track = $('#tzTrack'), B = window.SF_BANT || [];

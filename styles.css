@@ -265,6 +265,26 @@ html[data-script="arab"] .card .nm { font-size: 17px; }
 
 /* referanslar */
 .refs { background: var(--paper-2); }
+/* ---------- bizi seçen mekânlar: koyu sahne çerçevesi, logolar çevrede kayış gibi döner (app.js; beyaz logolar tools/logo_beyaz.py) ---------- */
+.cer { position: relative; padding: clamp(42px, 4.6vw, 62px); border-radius: 28px; isolation: isolate; overflow: hidden;
+  background:
+    radial-gradient(ellipse 46% 60% at 50% -8%, rgba(150,98,48,.55), rgba(90,56,26,.18) 55%, transparent 75%),
+    radial-gradient(ellipse 60% 34% at 50% 108%, rgba(170,108,52,.5), rgba(90,56,26,.15) 60%, transparent 80%),
+    radial-gradient(ellipse 30% 50% at 0% 50%, rgba(110,70,34,.28), transparent 70%),
+    radial-gradient(ellipse 30% 50% at 100% 50%, rgba(110,70,34,.28), transparent 70%),
+    #050404;
+  box-shadow: 0 40px 70px -40px rgba(0,0,0,.8), inset 0 0 0 1px rgba(217,178,106,.28); }
+.cer .venues { position: relative; z-index: 1; }
+.cer .venues figure { box-shadow: 0 0 0 1px rgba(217,178,106,.35), 0 20px 40px -20px #000; }
+.cer-l { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: center; align-items: center; position: relative; z-index: 1; }
+.cer-l img { display: block; width: auto; height: auto; max-width: var(--lw, 88px); max-height: var(--lh, 34px); opacity: .94; }
+/* yol destekleniyorsa (app.js .on ekler): logolar çerçevenin orta çizgisinde döner */
+.cer.on .cer-l { position: static; margin: 0; display: block; }
+.cer.on .cer-l li { position: absolute; top: 0; left: 0; z-index: 0; offset-anchor: 50% 50%; offset-rotate: auto; opacity: 0; will-change: offset-distance, opacity; }
+@media (max-width: 700px) {
+  .cer { padding: 34px; border-radius: 22px; --lw: 64px; --lh: 24px; }
+  .cer-l { --lw: 64px; --lh: 24px; }
+}
 .venues { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(150px, 17vw, 230px); gap: 12px; }
 .venues figure { margin: 0; position: relative; border-radius: var(--r); overflow: hidden; background: var(--night); }
 .venues .v-big { grid-column: span 2; grid-row: span 2; }
