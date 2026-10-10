@@ -369,7 +369,6 @@
     const code = ctry.c === 'INTL' ? 'INT' : ctry.c;
     $('#locCode').textContent = $('#locCode2').textContent = code;
     $('#locLang').textContent = $('#locLang2').textContent = L.name;
-    $('#stModels').textContent = fmt(P.length);
     renderCountrySelect($('#fCountry'), ctry.c);
     renderCols(); renderChips(); renderGrid(); renderQuote();
     if (pd.open && cur) openP(cur.id);
@@ -414,22 +413,48 @@
   const top = $('#top');
   addEventListener('scroll', () => top.classList.toggle('scrolled', scrollY > 10), { passive: true });
 
-  /* ---------- tasarla tanıtımı: stüdyo görselleri sırayla ---------- */
-  const tz = $('#tzImg');
-  // bölüm zemini = görselin köşe tonu (görsel kenarsız erir)
-  const tzTone = () => { try { const c = document.createElement('canvas'); c.width = c.height = 1; const x = c.getContext('2d'); x.drawImage(tz, 2, 2, 1, 1, 0, 0, 1, 1); const d = x.getImageData(0, 0, 1, 1).data; tz.closest('.tz').style.backgroundColor = `rgb(${d[0]},${d[1]},${d[2]})`; } catch {} };
-  if (tz) { tz.addEventListener('load', tzTone); if (tz.complete) tzTone(); }
-  if (tz && !reduce) {
-    const seq = [['queen', 'altin'], ['utopya', 'beyaz'], ['elika', 'siyah'], ['rose', 'gumus'], ['asel', 'altin'], ['hattat', 'beyaz']];
-    let ti = 0;
-    setInterval(() => {
-      if (document.hidden) return;
-      ti = (ti + 1) % seq.length;
-      const src = `assets/p/ai/genis-${seq[ti][0]}-${seq[ti][1]}.webp`, pre = new Image();
-      pre.onload = () => { tz.style.opacity = 0; setTimeout(() => { tz.src = src; tz.style.opacity = 1; }, 450); };
-      pre.src = src;
-    }, 3800);
-  }
+  /* ---------- tasarla bandı: sandalyeler sahneden geçer, ortada minderleri üstlerine konar (tools/bant.py → SF_BANT) ---------- */
+  (() => {
+    const band = $('#tzBand'), track = $('#tzTrack'), B = window.SF_BANT || [];
+    if (!band || !B.length) return;
+    const HIZ = 52, ORAN = 970 / 1300, ARALIK = 0.7;   // px/sn · kare en/boy · kareler arası adım (genişliğe oran)
+    const its = B.map((x, n) => {
+      const a = document.createElement('a'); a.className = 'tz-it'; a.tabIndex = -1;
+      a.innerHTML = `<img src="assets/bant/${x.id}-${x.g}.webp" alt="" loading="lazy" decoding="async"><img class="tz-m" alt="" decoding="async" style="left:${x.kutu[0]}%;top:${x.kutu[1]}%;width:${x.kutu[2]}%"><span class="tz-lbl"><b></b></span>`;
+      track.appendChild(a);
+      const it = { x, a, m: a.children[1], lbl: a.querySelector('b'), tur: n % 2, son: -1e9, on: false };
+      renkle(it); return it;
+    });
+    function renkle(it) {
+      const kod = it.x.k[it.tur % it.x.k.length];
+      it.m.src = `assets/bant/${it.x.id}-${it.x.g}-${kod}.webp`; it.lbl.textContent = 'Gökkuşağı ' + kod;
+      it.a.href = `siparis.html?m=${it.x.id}&g=${it.x.g}&k=${kod}`;
+    }
+    let w = 0, adim = 0, top = 0, bw = 0, ofs = 0, son = 0, gorunur = false, yon = 1;
+    function olc() { const h = band.clientHeight; bw = band.clientWidth; w = h * ORAN; adim = w * ARALIK; top = adim * its.length; yon = html.dir === 'rtl' ? -1 : 1; }
+    function ciz() {
+      const durak = bw * 0.36;   // minderin konduğu yer (kare merkezi bu çizgiyi geçince)
+      its.forEach((it, n) => {
+        let p = ((n * adim + ofs) % top + top) % top - w;        // karenin başlangıç kenarı; akış yönünde artar
+        if (p < it.son - adim) { it.tur++; it.on = false; it.a.classList.remove('on'); renkle(it); }   // başa sardı: minder kalkar, sıradaki renk
+        it.son = p;
+        if (!it.on && p + w / 2 > durak && p < bw) { it.on = true; it.a.classList.add('on'); }
+        it.a.style.transform = `translate3d(${yon * p}px,0,0)`;
+      });
+    }
+    function kare(t) {
+      if (!gorunur || document.hidden) { son = 0; return; }
+      if (son) ofs += Math.min(64, t - son) / 1000 * HIZ;
+      son = t; ciz(); requestAnimationFrame(kare);
+    }
+    olc(); ofs = bw * 0.5;
+    if (reduce) { ofs = bw * 0.9; ciz(); its.forEach(it => { if (it.son > -w && it.son < bw) it.a.classList.add('on'); }); return; }
+    ciz();
+    addEventListener('resize', () => { olc(); ciz(); });
+    new MutationObserver(() => { olc(); ciz(); }).observe(html, { attributes: true, attributeFilter: ['dir'] });
+    new IntersectionObserver(e => { const g = e[0].isIntersecting; if (g && !gorunur) { gorunur = true; son = 0; requestAnimationFrame(kare); } gorunur = g; }, { rootMargin: '120px' }).observe(band);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && gorunur) { son = 0; requestAnimationFrame(kare); } });
+  })();
 
   /* ---------- referans logo bandı: sıranın kopyası eklenir, hız genişliğe göre sabit ---------- */
   document.querySelectorAll('.mq-track').forEach(tr => {
