@@ -420,9 +420,10 @@
     const HIZ = 52, ORAN = 970 / 1300, ARALIK = 0.7;   // px/sn · kare en/boy · kareler arası adım (genişliğe oran)
     const its = B.map((x, n) => {
       const a = document.createElement('a'); a.className = 'tz-it'; a.tabIndex = -1;
-      a.innerHTML = `<img src="assets/bant/${x.id}-${x.g}.webp" alt="" loading="lazy" decoding="async"><img class="tz-m" alt="" decoding="async" style="left:${x.kutu[0]}%;top:${x.kutu[1]}%;width:${x.kutu[2]}%"><span class="tz-lbl"><b></b></span>`;
+      a.innerHTML = `<img src="assets/bant/${x.id}-${x.g}.webp" alt="" decoding="async"><img class="tz-m" alt="" decoding="async" style="left:${x.kutu[0]}%;top:${x.kutu[1]}%;width:${x.kutu[2]}%"><span class="tz-lbl"><b></b></span>`;
       track.appendChild(a);
       const it = { x, a, m: a.children[1], lbl: a.querySelector('b'), tur: n % 2, son: -1e9, on: false };
+      const g = a.children[0]; if (!g.complete) { a.classList.add('bek'); g.addEventListener('load', () => a.classList.remove('bek'), { once: true }); }
       renkle(it); return it;
     });
     function renkle(it) {
