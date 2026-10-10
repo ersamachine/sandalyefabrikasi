@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="tr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="sp.title">Sandalyeni tasarla · SF Sandalye Fabrikası</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F2F0EC">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css?v=202610100940">
+<link rel="stylesheet" href="styles.css?v=202610100940">
+<link rel="stylesheet" href="siparis.css?v=202610100940">
+</head>
+<body class="sp">
+<header class="sp-top">
+  <a class="brand" href="index.html" aria-label="SF Sandalye Fabrikası">
+    <svg class="logo" viewBox="0 0 196 56" aria-hidden="true"><path d="M8 4h88l-12 40H-4z" transform="translate(6 0)" fill="var(--red)"/><text x="16" y="34" class="lg-a">SAND</text><text x="96" y="34" class="lg-b">ALYE</text><text x="118" y="50" class="lg-c">FABRİKASI</text></svg>
+  </a>
+  <p class="sp-crumb"><a href="index.html#katalog" data-t="sp.back">‹ Kataloğa dön</a></p>
+  <div class="top-act">
+    <button class="loc" type="button" id="locBtn" data-t-aria="nav.loc" aria-label="Ülke ve dil"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 3.8 5.8 3.8 9s-1.2 6.2-3.8 9c-2.6-2.8-3.8-5.8-3.8-9S9.4 5.8 12 3z"/></svg><b id="locCode">TR</b><span id="locLang">Türkçe</span></button>
+    <a class="qbtn" href="index.html#sevkiyat"><span data-t="nav.quote">Teklif listesi</span> <b id="qCount">0</b></a>
+  </div>
+</header>
+
+<main class="studio" id="main">
+  <section class="stage2" aria-label="Önizleme" data-t-aria="sp.preview">
+    <div class="st-head">
+      <p class="st-col" id="stCol">Plastik lüks</p>
+      <h1 id="stName">Queen</h1>
+    </div>
+    <div class="st-view" id="stView">
+      <div class="st-chair" id="stChair">
+        <canvas id="cvA" aria-hidden="true"></canvas>
+        <canvas id="cvB" aria-hidden="true"></canvas>
+        <i class="st-shadow"></i>
+      </div>
+      <img class="st-scene" id="stScene" alt="" hidden>
+    </div>
+    <div class="st-tabs" role="tablist" data-t-aria="sp.viewA" aria-label="Görünüm">
+      <button type="button" role="tab" aria-selected="true" data-v="studio" data-t="sp.studio">Stüdyo</button>
+      <button type="button" role="tab" aria-selected="false" data-v="scene" data-t="sp.scene">Mekânda</button>
+    </div>
+    <p class="st-note" id="stNote" data-t="sp.note">Minder rengi, fotoğraftaki kumaş dokusu korunarak uygulanır; gerçek renk tonu ekran ayarına göre küçük farklar gösterebilir.</p>
+  </section>
+
+  <aside class="panel" aria-label="Seçenekler" data-t-aria="sp.options">
+    <div class="pn-in">
+      <div class="pn-head">
+        <h2 id="pnName">Queen</h2>
+        <p class="pn-spec" id="pnSpec"></p>
+      </div>
+
+      <section class="opt" aria-labelledby="oColl">
+        <h3 id="oColl" data-t="sp.coll">Koleksiyon</h3>
+        <div class="colls" id="colls" role="radiogroup" aria-labelledby="oColl"></div>
+      </section>
+
+      <section class="opt" aria-labelledby="oModel">
+        <h3 id="oModel" data-t="sp.model">Model</h3>
+        <div class="models" id="models" role="radiogroup" aria-labelledby="oModel"></div>
+      </section>
+
+      <section class="opt" aria-labelledby="oBody">
+        <h3 id="oBody"><span data-t="sp.body">Gövde rengi</span> <em id="bodyName"></em></h3>
+        <div class="bodies" id="bodies" role="radiogroup" aria-labelledby="oBody"></div>
+      </section>
+
+      <section class="opt" aria-labelledby="oMin" id="optMin" hidden>
+        <h3 id="oMin" data-t="sp.minder">Minder</h3>
+        <div class="seg" id="mins" role="radiogroup" aria-labelledby="oMin"><button type="button" role="radio" data-n="1" data-t="sp.withCush">Minderli</button><button type="button" role="radio" data-n="0" data-t="sp.noCush">Mindersiz</button></div>
+      </section>
+
+      <section class="opt" aria-labelledby="oCush" id="optCush">
+        <h3 id="oCush"><span data-t="sp.cush">Minder kumaşı</span> <em id="cushName"></em></h3>
+        <p class="opt-sub" id="cushSub" data-t="sp.cushSub">Nirvana kadife koleksiyonu · lüks grup</p>
+        <div class="fabrics" id="fabrics" role="radiogroup" aria-labelledby="oCush"></div>
+      </section>
+
+      <section class="opt" aria-labelledby="oQty">
+        <h3 id="oQty" data-t="sp.qty">Adet</h3>
+        <div class="qrow">
+          <div class="qty big"><button type="button" data-d="-1" aria-label="−">−</button><input id="qty" type="number" min="1" step="10" value="200" inputmode="numeric" data-t-aria="u.qty" aria-label="Adet"><button type="button" data-d="1" aria-label="+">+</button></div>
+          <div class="presets" id="presets"><button type="button" data-q="100">100</button><button type="button" data-q="360">360</button><button type="button" data-q="1000">1.000</button></div>
+        </div>
+        <div class="fill" id="fill"></div>
+      </section>
+
+      <section class="opt sum" aria-labelledby="oSum">
+        <h3 id="oSum" data-t="sp.sum">Seçiminiz</h3>
+        <dl id="sum"></dl>
+        <p class="small" data-t="sp.priceNote">Fiyat; adet, renk ve teslim ülkesine göre teklifte bildirilir.</p>
+      </section>
+    </div>
+    <div class="pn-bar">
+      <div class="pn-bar-txt"><b id="barName">Queen</b><span id="barSub"></span></div>
+      <button class="btn ghost" type="button" id="addList" data-t="sp.add">Listeye ekle</button>
+      <a class="btn" href="#" id="order" target="_blank" rel="noopener" data-t="sp.order">Teklif iste</a>
+    </div>
+  </aside>
+</main>
+
+<dialog class="loc-dlg" id="locD" aria-labelledby="locH">
+  <div class="loc-head">
+    <h2 id="locH" data-t="loc.title">Ülkenizi seçin</h2>
+    <button type="button" class="loc-x" id="locX" aria-label="Kapat" data-t-aria="loc.close"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg></button>
+  </div>
+  <p class="loc-lede" data-t="loc.lede">Sitenin dili ve teklif formundaki ülke, seçtiğiniz ülkeye göre ayarlanır.</p>
+  <div class="loc-langs" role="group" aria-labelledby="locLangLbl"><span id="locLangLbl" data-t="loc.lang">Dil</span><div id="locLangBtns"></div></div>
+  <div class="loc-list" id="locList"></div>
+</dialog>
+
+<script src="data/urunler.js?v=202610100940"></script>
+<script src="data/konfig.js?v=202610100940"></script>
+<script src="data/konfig-dugun.js?v=202610100940"></script>
+<script src="config.js?v=202610100940"></script>
+<script src="siparis.js?v=202610100940"></script>
+</body>
+</html>
