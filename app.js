@@ -451,6 +451,42 @@
     document.addEventListener('visibilitychange', () => { if (!document.hidden && gorunur) { son = 0; requestAnimationFrame(kare); } });
   })();
 
+  /* ---------- siparişten sevkiyata: 4 aşama sırayla canlanır (1: gövde/minder renkleri, 2-4: tanıtım filminden sessiz video parçaları) ---------- */
+  (() => {
+    const pan = $('#adPan'); if (!pan) return;
+    const bolum = pan.closest('.ad'), li = $$('li', pan), rb = $$('.ad-ray b', bolum), vid = li.map(l => $('video', l)), g1 = $$('.ad-g1 img', pan), sw = $$('.ad-sw i', pan);
+    const SURE1 = 7500, YEDEK = 9000;   // 1. aşama süresi · video yüklenemezse aşama süresi (ms)
+    let ak = 0, t0 = 0, gorunur = false, dondu = 0, renk = 0;
+    const oynat = v => { if (!v) return; const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+    function git(i, elle) {
+      ak = i; t0 = performance.now();
+      li.forEach((l, n) => { l.classList.toggle('ak', n === i); l.style.setProperty('--p', 0); });
+      rb.forEach((b, n) => { b.classList.toggle('ak', n === i); b.classList.toggle('gec', n < i); });
+      vid.forEach((v, n) => { if (!v) return; if (n === i) { try { v.currentTime = 0; } catch {} if (gorunur || elle) oynat(v); } else v.pause(); });
+    }
+    function ilerleme() {
+      const v = vid[ak], sure = performance.now() - t0;
+      if (!v) return sure / SURE1;
+      if (v.ended) return 1;
+      return v.duration > 0 ? v.currentTime / v.duration : sure / YEDEK;   // video oynuyorsa onun süresi
+    }
+    function kare() {
+      if (!gorunur || document.hidden) { dondu = 1; return; }
+      const p = Math.min(1, ilerleme());
+      bolum.style.setProperty('--ilr', (ak + p).toFixed(3)); li[ak].style.setProperty('--p', p.toFixed(3));
+      if (ak === 0) { const r = Math.min(g1.length - 1, Math.floor(p * g1.length)); if (r !== renk) { renk = r; g1.forEach((im, n) => im.classList.toggle('on', n === r)); sw.forEach((x, n) => x.classList.toggle('on', n === r)); } }
+      if (p >= 1) git((ak + 1) % li.length);
+      requestAnimationFrame(kare);
+    }
+    li.forEach((l, n) => $('.ad-g', l).addEventListener('click', () => { git(n, true); if (reduce) return; }));
+    rb.forEach((b, n) => b.addEventListener('click', () => git(n, true)));
+    git(0);
+    if (reduce) { bolum.classList.add('dur'); return; }   // hareket azaltılmışsa kendiliğinden oynamaz; tıklanan aşama oynar
+    const baslat = () => { if (!gorunur || document.hidden) return; dondu = 0; if (vid[ak]) oynat(vid[ak]); else t0 = performance.now() - (parseFloat(li[0].style.getPropertyValue('--p')) || 0) * SURE1; requestAnimationFrame(kare); };
+    new IntersectionObserver(e => { const g = e[0].isIntersecting; if (g === gorunur) return; gorunur = g; if (g) { vid.forEach(v => { if (v && v.preload === 'none') v.preload = 'auto'; }); baslat(); } else if (vid[ak]) vid[ak].pause(); }, { threshold: .25 }).observe(bolum);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { if (vid[ak]) vid[ak].pause(); } else if (dondu) baslat(); });
+  })();
+
   /* ---------- tasarla bandı: sandalyeler sahneden geçer, ortada minderleri üstlerine konar (tools/bant.py → SF_BANT) ---------- */
   (() => {
     const band = $('#tzBand'), track = $('#tzTrack'), B = window.SF_BANT || [];

@@ -264,6 +264,50 @@ html[data-script="arab"] .card .nm { font-size: 17px; }
 /* tasarla tanıtımı (koyu stüdyo) */
 
 /* referanslar */
+/* ---------- siparişten sevkiyata: 4 aşamalı canlı bant (app.js). Videolar 640×360: paneller büyütmeden gösterir ---------- */
+.ad { position: relative; color: #F4EFE7; padding-block: var(--sec); isolation: isolate; overflow: hidden; --gap: 18px;
+  background: radial-gradient(ellipse 50% 70% at 50% -12%, rgba(150,98,48,.5), rgba(90,56,26,.16) 55%, transparent 76%), radial-gradient(ellipse 70% 40% at 50% 112%, rgba(170,108,52,.42), transparent 75%), #050404; }
+.ad-bas { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 48px; margin-bottom: clamp(22px, 3vw, 32px); }
+.ad-k { font-size: 13px; color: #D9B26A; font-weight: 600; margin: 0 0 8px; }
+.ad h2 { font-size: clamp(36px, 5vw, 60px); color: #F4EFE7; }
+.ad-p { color: #CFC4B4; max-width: 44ch; margin: 0; }
+.ad-ray { position: relative; height: 44px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+.ad-ray::before { content: ''; position: absolute; inset-inline: 22px 0; top: 21px; height: 2px; background: rgba(255,255,255,.14); }
+.ad-ray::after { content: ''; position: absolute; inset-inline-start: 22px; top: 21px; height: 2px; width: min(calc((100% + var(--gap)) / 4 * var(--ilr, 0)), calc(100% - 22px)); background: linear-gradient(90deg, #C8202A, #F0D9A3); box-shadow: 0 0 14px rgba(240,217,163,.6); }
+html[dir="rtl"] .ad-ray::after { background: linear-gradient(270deg, #C8202A, #F0D9A3); }
+.ad-ray b { position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 600 20px/1 var(--serif); font-variant-numeric: lining-nums; background: #14100D; border: 1.5px solid rgba(255,255,255,.22); color: #A89D8D; cursor: pointer; transition: background .4s, border-color .4s, color .4s, box-shadow .4s; }
+.ad-ray b.gec { border-color: #D9B26A; color: #F0D9A3; }
+.ad-ray b.ak { background: #C8202A; border-color: #F04550; color: #fff; box-shadow: 0 0 0 6px rgba(200,32,42,.22), 0 10px 26px -6px rgba(200,32,42,.9); }
+.ad-pan { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+.ad-g { position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; padding: 0; border-radius: 18px; overflow: hidden; background: #0C0A09; border: 1px solid rgba(255,255,255,.1); cursor: pointer; color: inherit;
+  filter: saturate(.6) brightness(.66); transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s, border-color .5s, filter .5s; }
+.ad-pan li.ak .ad-g, .ad.dur .ad-g { filter: none; }
+.ad-pan li.ak .ad-g { border-color: rgba(217,178,106,.6); box-shadow: 0 0 0 1px rgba(217,178,106,.35), 0 30px 60px -24px #000, 0 0 60px -10px rgba(200,140,70,.45); transform: translateY(-6px); }
+.ad-g video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ad-g1 img { position: absolute; left: 50%; top: -14%; height: 128%; width: auto; max-width: none; transform: translateX(-50%); opacity: 0; transition: opacity .6s; }
+.ad-g1 img.on { opacity: 1; }
+.ad-g1 img { -webkit-mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent); mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent); }
+.ad-sw { position: absolute; inset-inline-end: 12px; top: 50%; transform: translateY(-50%); display: grid; gap: 8px; z-index: 2; }
+.ad-sw i { width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,255,255,.2); transition: box-shadow .3s, transform .3s; }
+.ad-sw i.on { box-shadow: 0 0 0 2px #050404, 0 0 0 4px #F0D9A3; transform: scale(1.12); }
+.ad-r { position: absolute; inset-inline-start: 10px; top: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; font: 700 11.5px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; background: rgba(20,16,13,.78); border: 1px solid rgba(217,178,106,.45); color: #F0D9A3; border-radius: 99px; padding: 6px 11px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+html[data-script="arab"] .ad-r { letter-spacing: 0; font-size: 12.5px; }
+.ad-r i { display: none; font-style: normal; }
+.ad-i { position: absolute; inset-inline-start: 0; bottom: 0; height: 3px; width: calc(var(--p, 0) * 100%); background: linear-gradient(90deg, #C8202A, #F0D9A3); z-index: 2; opacity: 0; }
+.ad-pan li.ak .ad-i { opacity: 1; }
+.ad-pan h3 { font-size: clamp(21px, 2vw, 27px); margin: 16px 0 6px; color: #F4EFE7; transition: opacity .5s; }
+.ad-pan p { color: #B9AE9E; font-size: 14.5px; line-height: 1.55; max-width: 30ch; margin: 0; transition: opacity .5s; }
+.ad:not(.dur) .ad-pan li:not(.ak) h3, .ad:not(.dur) .ad-pan li:not(.ak) p { opacity: .55; }
+@media (max-width: 900px) {
+  .ad { --gap: 12px; }
+  .ad-ray { display: none; }
+  .ad-pan { grid-template-columns: 1fr 1fr; max-width: 700px; margin-inline: auto; gap: 22px 12px; }
+  .ad-r i { display: inline; }
+  .ad-pan li.ak .ad-g { transform: translateY(-3px); }
+  .ad-pan h3 { font-size: 20px; margin-top: 12px; }
+  .ad-pan p { font-size: 13.5px; }
+  .ad-sw { inset-inline-end: 8px; gap: 6px; } .ad-sw i { width: 13px; height: 13px; }
+}
 .refs { background: var(--paper-2); }
 /* ---------- bizi seçen mekânlar: koyu sahne çerçevesi, logolar çevrede kayış gibi döner (app.js; beyaz logolar tools/logo_beyaz.py) ---------- */
 .cer { position: relative; padding: clamp(42px, 4.6vw, 62px); border-radius: 28px; isolation: isolate; overflow: hidden;
